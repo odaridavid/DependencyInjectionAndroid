@@ -3,6 +3,8 @@ package dev.davidodari.dependencyinjection
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -10,8 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import dev.davidodari.dependencyinjection.ui.theme.DependencyInjectionTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +28,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val carsViewModel = hiltViewModel<CarsViewModel>()
+                    val carsViewModel2 = viewModel<CarsViewModel>()
+                    CarList(cars = carsViewModel.getCars())
                 }
             }
         }
@@ -30,17 +38,24 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun CarList(cars: List<Car>) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        for (car in cars) {
+            CarItem(car = car)
+        }
+        Text(text = "Hello")
+    }
+}
+
+@Composable
+fun CarItem(car: Car) {
+    Text(text = car.name)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     DependencyInjectionTheme {
-        Greeting("Android")
+        CarList(emptyList())
     }
 }
