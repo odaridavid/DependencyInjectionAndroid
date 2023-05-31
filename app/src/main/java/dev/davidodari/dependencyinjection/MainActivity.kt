@@ -3,6 +3,7 @@ package dev.davidodari.dependencyinjection
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    CarList(cars = listOf())
                 }
             }
         }
@@ -30,17 +31,24 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun CarList(cars: List<Car>) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        for (car in cars) {
+            CarItem(car = car)
+        }
+        Text(text = "Hello")
+    }
+}
+
+@Composable
+fun CarItem(car: Car) {
+    Text(text = car.name)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     DependencyInjectionTheme {
-        Greeting("Android")
+        CarList(emptyList())
     }
 }
